@@ -95,13 +95,16 @@ Prueba Tecnica de una Aplicacion de Prescripciones Medicas.
  - npx prisma migrate dev (Ejecutar migraciones)
  - npx prisma db seed (Ejecutar seed)
  - npm run start:dev (Levantar el backend en modo desarrollo)
- - La documentación Swagger queda disponible en : http://localhost:4000/api/docs
+ - La documentación Swagger queda disponible en : http://localhost:4000/api/docs 
+ - En Produccion: https://backend-production-02e3.up.railway.app/docs
  - El backend queda disponible en: http://localhost:4000
+ - En Produccion: https://backend-production-02e3.up.railway.app/api
 
 - Frontend:
  - npm install (Instalar dependencias)
  - npm run dev (Ejecutar el frontend)
  - El frontend queda disponible en: http://localhost:3000
+ - En Produccion: https://pruebatecnicafrontend.vercel.app
 
 ---
 
@@ -111,7 +114,14 @@ Prueba Tecnica de una Aplicacion de Prescripciones Medicas.
   - npm run test (Iniciar el Test)
 - Frontend: 
  - npm run test (Iniciar el Test)
+---
 
+## URL DE DESPLIEGUE:
+    - Frontend:
+        https://pruebatecnicafrontend.vercel.app
+
+    - Backend: 
+        https://backend-production-02e3.up.railway.app/api
 
 ## Cuentas de prueba
 
