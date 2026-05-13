@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  admin
+  doctor
+  patient
+}
+
+enum PrescriptionStatus {
+  pending
+  consumed
+}
+
+enum AuditAction {
+  prescription_created
+  prescription_consumed
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  name         String
+  role         Role
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  deletedAt    DateTime?
+
+  doctor   Doctor?
+  patient  Patient?
+
+  auditLogs AuditLog[]
+
+  @@index([role])
+  @@index([email])
+}
+
+model Doctor {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  specialty String?
+  license   String?
+
+  user          User           @relation(fields: [userId], references: [id])
+  prescriptions Prescription[] @relation("AuthoredBy")
+}
+
+model Patient {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  birthDate DateTime?
+
+  user          User           @relation(fields: [userId], references: [id])
+  prescriptions Prescription[]
+}
+
+model Prescription {
+  id         String             @id @default(cuid())
+  code       String             @unique
+  status     PrescriptionStatus @default(pending)
+  notes      String?
+  createdAt  DateTime           @default(now())
+  consumedAt DateTime?
+  deletedAt  DateTime?
+
+  patientId String
+  authorId  String
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  author  Doctor  @relation("AuthoredBy", fields: [authorId], references: [id])
+
+  items     PrescriptionItem[]
+  auditLogs AuditLog[]
+
+  @@index([status, createdAt])
+  @@index([patientId])
+  @@index([authorId])
+}
+
+model PrescriptionItem {
+  id             String @id @default(cuid())
+  prescriptionId String
+
+  name         String
+  dosage       String?
+  quantity     Int?
+  instructions String?
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id             String      @id @default(cuid())
+  action         AuditAction
+  createdAt      DateTime    @default(now())
+  metadata       Json?
+
+  userId         String?
+  prescriptionId String?
+
+  user         User?         @relation(fields: [userId], references: [id])
+  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
+
+  @@index([action])
+  @@index([createdAt])
+}
