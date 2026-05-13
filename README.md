@@ -112,6 +112,7 @@ Prueba Tecnica de una Aplicacion de Prescripciones Medicas.
  - Backend: 
   - npx jest --clearCache(limpiar el Cache)
   - npm run test (Iniciar el Test)
+  - npm run test:cov (Iniciar el Coverage)
 - Frontend: 
  - npm run test (Iniciar el Test)
 ---
